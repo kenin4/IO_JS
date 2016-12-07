@@ -549,10 +549,13 @@
 			variablesBasicas = new Array(numRestricciones);
 			for(i=0;i<numRestricciones;i++)
 			{
+				variablesBasicas[i]=numVariables + 1 + i;
+	/*			i+1+numVariables+numVariablesHolgura;
+
 				if(i<numVariables)
 					variablesBasicas[i]=i+1+numVariables+numVariablesHolgura;
 				else
-					variablesBasicas[i]=i+1;
+					variablesBasicas[i]=i+1;*/
 			}
 		}
 		numVariablesExceso = variablesExceso.length;
