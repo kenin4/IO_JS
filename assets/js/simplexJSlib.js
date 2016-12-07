@@ -117,8 +117,7 @@
 		
 		//console.log("Número de variables : " + numVariablesHolgura);
 		//console.log("Número de restricciones : " + numRestricciones);
-		tabla.insertAdjacentHTML('afterEnd','<button onclick="iterarSolucion()">Solucionar</button>')
-		tabla.insertAdjacentHTML('afterEnd','<button onclick="pasoAPaso()">Solución paso a paso</button>')
+		tabla.insertAdjacentHTML('afterEnd','<button class="btn btn-success" onclick="pasoAPaso()">Solución paso a paso</button>')
 
 		mensajePrimero = document.getElementById('objetivoTabA');
 		mensajePrimero.click();
@@ -764,14 +763,14 @@
 				for(j=0;j<numColumnas;j++)
 					if(j == 0)
 						if (i == 0)
-							nuevaFila+='<td style="background-color:#6FD3FF; text-align:center"> ' + "Z" +"</td>";
+							nuevaFila+='<td style="background-color:#6FD3FF; text-align:center"> ' + "Z" +"</td>";   //Se pinta el cuadro de Z
 						else
 							nuevaFila+='<td style="text-align:center"> ' + getVariableBasica(variablesBasicas[i-1]) +"</td>";
 					else if(colP == j)
 							if(filaP == i)
-								nuevaFila+='<td style="background-color:#8AF781; text-align:center"> ' + (tableo[i][j].toFixed(4)) +"</td>";
+								nuevaFila+='<td style="background-color:#8AF781; text-align:center"> ' + (tableo[i][j].toFixed(4)) +"</td>"; //Es el valor pivote
 							else
-								nuevaFila+='<td style="background-color:#F7BE81; text-align:center"> ' + (tableo[i][j].toFixed(4)) +"</td>";
+								nuevaFila+='<td style="background-color:#F7BE81; text-align:center"> ' + (tableo[i][j].toFixed(4)) +"</td>"; //Pertenece a la fila o columna pivote
 						else
 							nuevaFila+='<td style="text-align:center">' + (tableo[i][j].toFixed(4)) +"</td>";
 				nuevaFila+="</tr>";
@@ -786,7 +785,7 @@
 				for(j=0;j<numColumnas;j++)
 					if(j == 0)
 						if(i==0)
-							nuevaFila+='<td style="background-color:#6FD3FF; color:white; text-align:center"> ' + "Z" +"</td>";
+							nuevaFila+='<td style="background-color:#6FD3FF; text-align:center"> ' + "Z" +"</td>";
 						else
 							nuevaFila+='<td style="text-align:center"> ' + getVariableBasica(variablesBasicas[i-1]) +"</td>";
 					else
