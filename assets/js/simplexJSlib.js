@@ -543,20 +543,8 @@
 
 		numVariablesHolgura = variablesHolgura.length;
 		numVariablesArtificial = variablesArtificial.length;
-		if(fase!=2)
-		{
-			variablesBasicas = new Array(numRestricciones);
-			for(i=0;i<numRestricciones;i++)
-			{
-				variablesBasicas[i]=numVariables + 1 + i;
-	/*			i+1+numVariables+numVariablesHolgura;
+		
 
-				if(i<numVariables)
-					variablesBasicas[i]=i+1+numVariables+numVariablesHolgura;
-				else
-					variablesBasicas[i]=i+1;*/
-			}
-		}
 		numVariablesExceso = variablesExceso.length;
 		console.log("Variables de holgura: " + numVariablesHolgura);
 		console.log("Variables artificiales: " + numVariablesArtificial);
@@ -644,6 +632,23 @@
 		log_array(matriz);
 		var matriz_temporal = arrayClone(matriz);
 		historial.push(matriz_temporal);
+
+		if(fase!=2)
+		{
+			variablesBasicas = new Array(numRestricciones);
+			for(i=0;i<numRestricciones;i++)
+			{
+				for(j=1;j<=numRestricciones;j++)
+				{
+					console.log("matriz[ " +j + "][" +  (numVariables + i + 1) + "]");
+					if(matriz[j][numVariables+i + 1] == 1)
+					{
+						console.log("ES ACÁ");
+						variablesBasicas[j-1]=numVariables+i+1;
+					}
+				}
+			}
+		}
 
 		switch(fase)
 		{
