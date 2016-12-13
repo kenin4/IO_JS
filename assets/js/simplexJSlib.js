@@ -362,7 +362,7 @@
 				}
 			}
 			historial.push(arrayClone(matriz));
-			imprime_matriz(arrayClone(historial[historial.length-1]),historial.length-1,"La matriz después de aplicar Gauss-Jordan","Se divide la fila pivote entre el elemento pivote. <br>Se eliminan los valores distintos de 0 en la columna pivote",true);
+			imprime_matriz(arrayClone(historial[historial.length-1]),historial.length-1,"La matriz después de aplicar Gauss-Jordan","Se divide la fila pivote entre el elemento pivote. <br>Se eliminan los valores distintos de 0 en la columna pivote",false);
 			log_array(matriz,"La matriz después de aplicar Gauss-Jordan");
 		}	
 		if(error==true)
@@ -724,7 +724,7 @@
 		else
 			abierto= "";
 		tabla = document.getElementById('collapse-group');
-		tabla.insertAdjacentHTML('beforeEnd','<div class="accordion-group widget-box"><div class="accordion-heading"><div class="widget-title"> <a data-parent="#collapse-group" href="#pagina' + pagina +  '" data-toggle="collapse"> <span class="icon"><i class="icon-table"></i></span><h5> ' + mensaje + '</h5></a> </div></div><div class="collapse ' + abierto + ' accordion-body" id="pagina' + pagina + '"><div class="widget-content" id="contenidoPagina' + pagina + '"></div></div>');
+		tabla.insertAdjacentHTML('beforeEnd','<div class="collapsible widget-box"><div class=""><div class="widget-title"> <a data-parent="#collapse-group" href="#pagina' + pagina +  '" data-toggle="collapse"> <span class="icon"><i class="icon-table"></i></span><h5> ' + mensaje + '</h5></a> </div></div><div class="collapse ' + abierto + ' " id="pagina' + pagina + '"><div class="widget-content" id="contenidoPagina' + pagina + '"></div></div>');
 		
 		tabla = document.getElementById('contenidoPagina' + pagina);
 		if(submensaje!="")
@@ -744,28 +744,30 @@
 			if(i>numVariables+numVariablesHolgura+numVariablesArtificial && i<=numVariables+numVariablesHolgura+numVariablesArtificial+numVariablesExceso)
 				nuevaFila+="<th>E" + (i-numVariables-numVariablesHolgura-numVariablesArtificial) + "</th>";
 			if(i==numColumnas-1)
-				nuevaFila+="<th>R</th>";
-		}	
+				nuevaFila+="<th>R.H.S.</th>";
 
+		}	
+		if(especial)
+			nuevaFila+="<th>Cociente</th>";
 		nuevaFila+="</tr>";
 		tablaTemporal.insertAdjacentHTML('beforeEnd',nuevaFila);
 		console.log("Hay " + historialFilaPivote.length + " datos en el historial de las filas pivotes");
 		if(especial)
 		{
-			console.error("Sí entro al modo especial");
+			//console.error("Sí entro al modo especial");
 			var filaP = historialFilaPivote.pop();
 			var colP = historialColumnaPivote.pop();
 			var sum = 0;
 			if (fase==2)
 				sum = 1;
-			for(i=0;i<numFilas;i++)
+			for(var i=0;i<numFilas;i++)
 			{
 				if(filaP == i)
 					nuevaFila ='<tr style="background-color:#F7BE81"> ';
 				else
 					nuevaFila ='<tr> ';
 
-				for(j=0;j<numColumnas;j++)
+				for(var j=0;j<numColumnas;j++)
 					if(j == 0)
 						if (i == 0)
 							nuevaFila+='<td style="background-color:#6FD3FF; text-align:center"> ' + "Z" +"</td>";   //Se pinta el cuadro de Z
@@ -773,28 +775,33 @@
 							nuevaFila+='<td style="text-align:center"> ' + getVariableBasica(variablesBasicas[i-1]) +"</td>";
 					else if(colP == j)
 							if(filaP == i)
-								nuevaFila+='<td style="background-color:#8AF781; text-align:center"> ' + (tableo[i][j].toFixed(4)) +"</td>"; //Es el valor pivote
+								nuevaFila+='<td style="background-color:#8AF781; text-align:center"> ' + truncarNumero(tableo[i][j]) +"</td>"; //Es el valor pivote
 							else
-								nuevaFila+='<td style="background-color:#F7BE81; text-align:center"> ' + (tableo[i][j].toFixed(4)) +"</td>"; //Pertenece a la fila o columna pivote
+								nuevaFila+='<td style="background-color:#F7BE81; text-align:center"> ' + truncarNumero(tableo[i][j]) +"</td>"; //Pertenece a la fila o columna pivote
 						else
-							nuevaFila+='<td style="text-align:center">' + (tableo[i][j].toFixed(4)) +"</td>";
+							nuevaFila+='<td 	style="text-align:center">' + truncarNumero(tableo[i][j]) +"</td>";
+
+				if(i!=0)
+					nuevaFila+='<td style="text-align:center">' + truncarNumero(tableo[i][numColumnas-1]) + " / " + truncarNumero(tableo[i][colP]) + " = " + truncarNumero(tableo[i][numColumnas-1]/tableo[i][colP])  +   '</td>';
+				else
+					nuevaFila+='<td style="text-align:center"> No aplica </td>'
 				nuevaFila+="</tr>";
 				tablaTemporal.insertAdjacentHTML('beforeEnd',nuevaFila);
 			}
 		}
 		else
 		{
-			for(i=0;i<numFilas;i++)
+			for(var i=0;i<numFilas;i++)
 			{
 				nuevaFila ='<tr> ';
-				for(j=0;j<numColumnas;j++)
+				for(var j=0;j<numColumnas;j++)
 					if(j == 0)
 						if(i==0)
 							nuevaFila+='<td style="background-color:#6FD3FF; text-align:center"> ' + "Z" +"</td>";
 						else
 							nuevaFila+='<td style="text-align:center"> ' + getVariableBasica(variablesBasicas[i-1]) +"</td>";
 					else
-						nuevaFila+='<td style="text-align:center">' + (tableo[i][j].toFixed(4)) +"</td>";
+						nuevaFila+='<td style="text-align:center">' +  truncarNumero(tableo[i][j])	 +"</td>";
 				nuevaFila+="</tr>";
 				tablaTemporal.insertAdjacentHTML('beforeEnd',nuevaFila);
 			}
@@ -806,6 +813,20 @@
 	function strip(number) {
     	return parseFloat(number.toFixed(10));
 	}
+
+	function truncarNumero(number)
+	{
+		numString = number.toFixed(4);
+		numDecimal = 0;
+		len = numString.length;
+		for(i=1;i<=4;i++)
+			if(numString[len-i]!='0')
+				break;
+			else
+				numDecimal++;
+		console.log("El numero truncado es " + parseFloat(number.toFixed(4-numDecimal)));
+		return parseFloat(number.toFixed(4-numDecimal));
+	}	
 
 	function getVariableBasica(indice)
 	{
