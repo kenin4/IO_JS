@@ -9,6 +9,7 @@ var cuadro;
 var maxX1, maxX2;
 var zX1,zX2;
 var zRes;
+var colores;
 function entrada_variables() {
 	numRestricciones = parseInt(document.getElementById('restricciones').value);
 	if(isNaN(numRestricciones))
@@ -63,20 +64,23 @@ function entrada_variables() {
 			document.getElementById('coeficientesObjetivo').insertAdjacentHTML('beforeEnd','<td><input type="number" class="coeficientes span1 m-wrap" ></td>');
 		}
 	}
+
+	colores = new Array();
 	
 	for(i=0;i<numRestricciones;i++)
 	{
 		tabla.insertAdjacentHTML('beforeEnd','<tr id="fila' + (i+1) + '"></tr>');
 		fila = document.getElementById('fila' + (i+1));
 		console.log(fila);
-		var randomColor = colorAleatorio(0.4);
+		var randomColor = colorAleatorio(1);
+		colores.push(randomColor);
 		//Se agrega cada entrada de coeficientes de cada restricción
 		for(j=1;j<=numVariables+2;j++)
 		{
 			if(j==numVariables+1)
 				{
 					fila.insertAdjacentHTML('beforeEnd','<td></td>');
-					fila.insertAdjacentHTML('beforeEnd','<td> <select style="background-color:' + randomColor+';" name="desigualdad" class="span1 m-wrap"> <option value="0">&lt;=</option><option value="1">=</option><option value="2">&gt;=</option></select> </td>');
+					fila.insertAdjacentHTML('beforeEnd','<td> <select name="desigualdad" class="span1 m-wrap"> <option value="0">&lt;=</option><option value="1">=</option><option value="2">&gt;=</option></select> </td>');
 				}
 				else
 				{
@@ -84,7 +88,7 @@ function entrada_variables() {
 						fila.insertAdjacentHTML('beforeEnd','<td></td>');
 					else if(j!=1)
 						fila.insertAdjacentHTML('beforeEnd','<td><label>+</label></td>');
-					fila.insertAdjacentHTML('beforeEnd','<td><input type="number" style="background-color:' + randomColor+';" class="coeficientes span1 m-wrap"></td>');
+					fila.insertAdjacentHTML('beforeEnd','<td><input type="number" class="coeficientes span1 m-wrap"></td>');
 				}
 		}
 	}
@@ -112,7 +116,7 @@ function graficar()
 	mensajePrimero = document.getElementById('graficoTabA');
 	mensajePrimero.click();
 
-	document.getElementById('grafica').insertAdjacentHTML('beforeEnd','<div style="overflow:scroll"><canvas  id="myCanvas" width="880" height="850"></canvas></div>');
+	document.getElementById('grafica').insertAdjacentHTML('beforeEnd','<div style="overflow:auto;" class="span10"><canvas style="margin-left:10px;" id="myCanvas" width="880" height="850"></canvas> </div> <div  class="span4" id="letrero">Lista de Funciones graficadas al momento</div>');
 	canvas = document.getElementById('myCanvas');
 	cleanCanvas = document.createElement('canvas');
 	cleanCanvas.height = 850;
@@ -307,10 +311,16 @@ function graficar()
 	
 	for(i=0;i<numRestricciones;i++)
 	{
-		drawLine(lineas[i][0], lineas[i][1], lineas[i][2], lineas[i][3],colorAleatorio(1.0));
+		drawLine(lineas[i][0], lineas[i][1], lineas[i][2], lineas[i][3],colores[i]);
 	}
 
-
+	var letrero = document.getElementById('letrero');
+	letrero.insertAdjacentHTML('beforeEnd','<ul id="lista"></ul>');
+	letrero = document.getElementById('lista');
+	for(i=0;i<numRestricciones;i++)
+	{
+		letrero.insertAdjacentHTML('beforeEnd','<li style="color:'+colores[i] + '" >' + coeficientes[2+(i*3)].value+ 'X1 + ' +  coeficientes[2+(i*3)+1].value +'X2 = ' + coeficientes[2+(i*3)+2].value +  '</li>');
+	}
 	ctxClean.drawImage(canvas,0,0);
 	
 
