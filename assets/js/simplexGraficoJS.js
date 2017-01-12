@@ -105,7 +105,16 @@ function entrada_variables() {
 
 function graficar()
 {
-	
+
+	var coeficientes = document.getElementsByClassName('coeficientes');
+	for(i=0;i<coeficientes.length;i++)
+	{
+		if(isNaN(parseFloat(coeficientes[i].value)))
+		{
+			alert('Introduce todos los campos correctamente');
+			return;
+		}
+	}
 	var intersecciones = new Array(2);
 	intersecciones[0]=new Array();
 	intersecciones[1]=new Array();
@@ -172,7 +181,7 @@ function graficar()
 	var pendientes = new Array();
 	var lineas = new Array(numRestricciones);
 
-	var coeficientes = document.getElementsByClassName('coeficientes');
+	
 	zX1=parseFloat(coeficientes[0].value);
 	zX2=parseFloat(coeficientes[1].value);
 

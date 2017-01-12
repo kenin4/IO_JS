@@ -130,6 +130,15 @@
 
 	function pasoAPaso() {
 
+		coeficientes = document.getElementsByClassName('coeficientes');
+		for(i=0;i<coeficientes.length;i++)
+		{
+			if(isNaN(parseFloat(coeficientes[i].value)))
+			{
+				alert('Introduce todos los campos correctamente');
+				return;
+			}
+		}
 
 		//document.getElementById('collapse-group').insertAdjacentHTML('beforeEnd','<div class="accordion-group widget-box"><div class="accordion-heading"><div class="widget-title"> <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse"> <span class="icon"><i class="icon-magnet"></i></span><h5>Accordion Example 1</h5></a> </div></div><div class="collapse in accordion-body" id="collapseGOne"><div class="widget-content"> It has multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </div></div>');
 		//document.getElementById('collapse-group').insertAdjacentHTML('beforeEnd','<div class="accordion-group widget-box"><div class="accordion-heading"><div class="widget-title"> <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse"> <span class="icon"><i class="icon-magnet"></i></span><h5>Accordion Example 1</h5></a> </div></div><div class="collapse in accordion-body" id="collapseGTwo"><div class="widget-content"> It has multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end. </div></div>');
