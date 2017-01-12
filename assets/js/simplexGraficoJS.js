@@ -10,6 +10,7 @@ var maxX1, maxX2;
 var zX1,zX2;
 var zRes;
 var colores;
+var intersecciones,areaFactible;
 function entrada_variables() {
 	numRestricciones = parseInt(document.getElementById('restricciones').value);
 	if(isNaN(numRestricciones))
@@ -105,6 +106,10 @@ function entrada_variables() {
 function graficar()
 {
 	
+	var intersecciones = new Array(2);
+	intersecciones[0]=new Array();
+	intersecciones[1]=new Array();
+
 
 	var mensajePrimero = document.getElementById('mensajePrimero3');
 	if(mensajePrimero != null)
@@ -186,20 +191,20 @@ function graficar()
 		lineas[i] = new Array();
 		if(x1Array[i] == 0 )
 		{
-			console.log("Asintota vertical");
-			lineas[i].push(zArray[i]/x2Array[i]);
+			console.log("Asintota horizontal");
 			lineas[i].push(0);
 			lineas[i].push(zArray[i]/x2Array[i]);
 			lineas[i].push('INF');
+			lineas[i].push(zArray[i]/x2Array[i]);
 		}
 		else if(x2Array[i] == 0)
 			{
-				console.log("Asintota horizontal");
+				console.log("Asintota vertical");
 
+				lineas[i].push(zArray[i]/x1Array[i]);
 				lineas[i].push(0);
 				lineas[i].push(zArray[i]/x1Array[i]);
 				lineas[i].push('INF');
-				lineas[i].push(zArray[i]/x1Array[i]);
 			}
 		else
 		{
@@ -291,8 +296,6 @@ function graficar()
 	{
 		str = (maxX1/10*i).toFixed(2);
 		var len = ctx.measureText(str).width/2;	
-		console.log("La longitud es " + len);
-		console.log(str);
 		ctx.fillText(str,40+80*i-len,820);
 	}
 
@@ -314,6 +317,144 @@ function graficar()
 		drawLine(lineas[i][0], lineas[i][1], lineas[i][2], lineas[i][3],colores[i]);
 	}
 
+
+	//En esta parte se calculan las intersecciones de las rectas
+	for(i=0;i<numRestricciones;i++)
+	{
+		intersecciones[0].push(lineas[i][0]);
+		intersecciones[1].push(lineas[i][1]);
+		intersecciones[0].push(lineas[i][2]);
+		intersecciones[1].push(lineas[i][3]);
+	}
+	console.log(intersecciones[0]);
+	console.log(intersecciones[1]);
+
+	for(i=0;i<numRestricciones-1;i++)
+	{
+		console.error("Se calcula una intersección");
+		for(j=i+1;j<numRestricciones;j++)
+		{
+			if(parseFloat(coeficientes[2+i*3+1].value)==0)
+			{	
+				x1tmp = parseFloat(coeficientes[2+i*3+2].value)/parseFloat(coeficientes[2+i*3].value)
+				console.log("para el caso de asintota x1 = " + x1tmp );
+				x2tmp = (parseFloat(coeficientes[2+j*3+2].value) -  parseFloat(coeficientes[2+j*3].value)*x1tmp) / parseFloat(coeficientes[2+j*3+1].value);
+				console.log("para el caso de asintota x2 = " + x2tmp );
+
+			}
+			else
+			{
+				x2tmp = parseFloat(coeficientes[2+j*3+1].value)/parseFloat(coeficientes[2+i*3+1].value);
+				console.log(parseFloat(coeficientes[2+j*3+1].value) + " / " + parseFloat(coeficientes[2+i*3+1].value));
+				x1tmp = parseFloat(coeficientes[2+i*3].value)*x2tmp - parseFloat(coeficientes[2+j*3].value);
+				console.log(x1tmp);
+				x1tmp  = (parseFloat(coeficientes[2+i*3+2].value)*x2tmp-parseFloat(coeficientes[2+j*3+2].value))/x1tmp;
+				console.log(x1tmp);
+				x2tmp = (parseFloat(coeficientes[2+i*3+2].value) -  parseFloat(coeficientes[2+i*3].value)*x1tmp) / parseFloat(coeficientes[2+i*3+1].value);
+				console.log("Las intersecciones son (" + x1tmp.toFixed(2) + " , " + x2tmp.toFixed(2) + " )" ); 
+			}
+			if(x1tmp>= 0.0 && x2tmp>=0.0)
+			{
+				intersecciones[0].push(x1tmp);
+				intersecciones[1].push(x2tmp);
+			}
+		}
+	}
+
+
+
+
+	intersecciones[0].push(0.0);
+	intersecciones[1].push(0.0);
+	console.log(intersecciones[0]);
+	console.log(intersecciones[1]);
+
+	var puntos = new Array();
+	for(i=0;i<intersecciones[0].length;i++)
+		puntos.push({x:intersecciones[0][i],y:intersecciones[1][i]});
+
+
+
+	var areaFactible= new Array();
+	//Se valida si cada punto entra dentro de las restricciones
+
+	desigualdades = document.getElementsByName('desigualdad');
+	var areaLineal = false;
+
+	for(i=0;i<intersecciones[0].length;i++)
+	{
+		var dentro = true;
+		for(j=0;j<numRestricciones;j++)
+		{
+			evaluacion = intersecciones[0][i] * parseFloat(coeficientes[2+j*3].value) + intersecciones[1][i] * parseFloat(coeficientes[2+j*3 + 1 ].value);  
+			desigualdad = parseInt(desigualdades[j].value);
+
+			switch(desigualdad)
+			{
+				case 0:
+					if(evaluacion <= parseFloat(coeficientes[2+j*3+2].value))
+						break;
+					else
+					{
+						dentro = false;
+						console.error(intersecciones[0][i] + " *  " + parseFloat(coeficientes[2+j*3].value)  + " + " +  intersecciones[1][i] + " * "  + parseFloat(coeficientes[2+j*3 + 1 ].value) + "  [[ " + evaluacion +  "]] !<= " + coeficientes[2+j*3+2].value + "  (" + intersecciones[0][i]+ " , " + intersecciones[1][i]+ ")");
+
+					}
+					break;
+				case 1:
+					areaLineal = true;
+					if(evaluacion == parseFloat(coeficientes[2+j*3+2].value))
+						break;
+					else
+					{
+						console.error(intersecciones[0][i] + " *  " + parseFloat(coeficientes[2+j*3].value)  + " + " +  intersecciones[1][i] + " * "  + parseFloat(coeficientes[2+j*3 + 1 ].value) + "  [[" + evaluacion +  "]] != " + coeficientes[2+j*3+2].value + "  (" + intersecciones[0][i]+ " , " + intersecciones[1][i]+ ")");
+						dentro = false;
+					}
+					break;
+				case 2:
+					if(evaluacion >= parseFloat(coeficientes[2+j*3+2].value))
+						break;
+					else
+					{
+						console.error(intersecciones[0][i] + " *  " + parseFloat(coeficientes[2+j*3].value)  + " + " +  intersecciones[1][i] + " * "  + parseFloat(coeficientes[2+j*3 + 1 ].value) + "  [[" + evaluacion +  "]] !>= " + coeficientes[2+j*3+2].value + "  (" + intersecciones[0][i]+ " , " + intersecciones[1][i]+ ")");
+						dentro = false;
+					}
+					break;
+				default:
+					console.error("No entró en ninguna");
+					break;
+			}
+		}
+		if(dentro==true)
+		{
+			areaFactible.push(puntos[i]);
+		}
+	}
+	console.error("Los puntos que entraron son ");
+	
+	console.log(areaFactible);
+
+	dibujarAreaFactible(convexHull(areaFactible));
+
+	var minZ=Number.POSITIVE_INFINITY, maxZ=Number.NEGATIVE_INFINITY;
+	var pMax, pMin;
+	for(i=0;i<areaFactible.length;i++)
+	{
+		if(minZ>areaFactible[i].x*parseFloat(coeficientes[0].value) + areaFactible[i].y*parseFloat(coeficientes[1].value))
+		{
+			console.error(areaFactible[i].x*parseFloat(coeficientes[0].value) + areaFactible[i].y*parseFloat(coeficientes[1].value));
+			minZ =  areaFactible[i].x*parseFloat(coeficientes[0].value) + areaFactible[i].y*parseFloat(coeficientes[1].value);
+			pMin = areaFactible[i];
+		}
+
+		if(maxZ<areaFactible[i].x*parseFloat(coeficientes[0].value) + areaFactible[i].y*parseFloat(coeficientes[1].value))
+		{
+			console.error(areaFactible[i].x*parseFloat(coeficientes[0].value) + areaFactible[i].y*parseFloat(coeficientes[1].value));
+			maxZ =  areaFactible[i].x*parseFloat(coeficientes[0].value) + areaFactible[i].y*parseFloat(coeficientes[1].value);
+			pMax = areaFactible[i];
+		}
+	}
+
 	var letrero = document.getElementById('letrero');
 	letrero.insertAdjacentHTML('beforeEnd','<ul id="lista"></ul>');
 	letrero = document.getElementById('lista');
@@ -321,6 +462,18 @@ function graficar()
 	{
 		letrero.insertAdjacentHTML('beforeEnd','<li style="color:'+colores[i] + '" >' + coeficientes[2+(i*3)].value+ 'X1 + ' +  coeficientes[2+(i*3)+1].value +'X2 = ' + coeficientes[2+(i*3)+2].value +  '</li>');
 	}
+	if(areaLineal==true)
+		letrero.insertAdjacentHTML('afterEnd','<p class="error">No se dibuja un área factible debido a que hay restricciones del tipo "=" </p>')
+	letrero.insertAdjacentHTML('afterEnd','<h3>Z : ' + maxZ + '</h3>');
+	letrero.insertAdjacentHTML('afterEnd','<h3>X2 : ' + pMax.y + '</h3>');
+	letrero.insertAdjacentHTML('afterEnd','<h3>X1 : ' + pMax.x + '</h3>');
+	letrero.insertAdjacentHTML('afterEnd','<h2>Punto máximo</h2>');
+
+	letrero.insertAdjacentHTML('afterEnd','<h3>Z : ' + minZ + '</h3>');
+	letrero.insertAdjacentHTML('afterEnd','<h3>X2 : ' + pMin.y + '</h3>');
+	letrero.insertAdjacentHTML('afterEnd','<h3>X1 : ' + pMin.x + '</h3>');
+	letrero.insertAdjacentHTML('afterEnd','<h2>Punto mínimo</h2>');
+
 	ctxClean.drawImage(canvas,0,0);
 	
 
@@ -353,3 +506,69 @@ function colorAleatorio(alpha)
 {
    return "rgba(" + aleatorio(0,200) + "," + aleatorio(0,200) + "," + aleatorio(0,200) + "," + alpha + ")";
 }
+
+function dibujarAreaFactible(area)
+{
+
+	if(area.length<3)
+	{
+		alert("No se puede crear el poligono");
+		return;
+	}
+	ctx.fillStyle = "rgba(124, 255, 44, 0.3)";
+	
+	
+	/*
+	for(i=2;i<area.length;i++)
+	{
+		a= area[i-2];
+		b=area[i-1];
+		c=area[i];
+
+
+		ctx.beginPath();
+		ctx.moveTo(a.x*escalaX1+40,(810-a.y*escalaX2));
+		ctx.lineTo(b.x*escalaX1+40,(810-b.y*escalaX2));
+		ctx.lineTo(c.x*escalaX1+40,(810-c.y*escalaX2));
+		ctx.closePath();
+		ctx.fill();
+
+	}
+	*/
+	ctx.beginPath();
+	ctx.moveTo(area[0].x*escalaX1+40,(810-area[0].y*escalaX2));
+
+	for(i=1;i<area.length;i++)
+	{
+		ctx.lineTo(area[i].x*escalaX1+40,(810-area[i].y*escalaX2));
+	}
+	ctx.closePath();
+	ctx.fill();
+
+	
+}
+
+	function convexHull(points) {
+        points.sort(function (a, b) {
+            return a.x != b.x ? a.x - b.x : a.y - b.y;
+        });
+
+        var n = points.length;
+        var hull = [];
+
+        for (var i = 0; i < 2 * n; i++) {
+            var j = i < n ? i : 2 * n - 1 - i;
+            while (hull.length >= 2 && removeMiddle(hull[hull.length - 2], hull[hull.length - 1], points[j]))
+                hull.pop();
+            hull.push(points[j]);
+        }
+
+        hull.pop();
+        return hull;
+    }
+
+    function removeMiddle(a, b, c) {
+        var cross = (a.x - b.x) * (c.y - b.y) - (a.y - b.y) * (c.x - b.x);
+        var dot = (a.x - b.x) * (c.x - b.x) + (a.y - b.y) * (c.y - b.y);
+        return cross < 0 || cross == 0 && dot <= 0;
+    }
