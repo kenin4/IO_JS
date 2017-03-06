@@ -122,11 +122,8 @@ function graficar()
 
 	var mensajePrimero = document.getElementById('mensajePrimero3');
 	if(mensajePrimero != null)
-	{
 		mensajePrimero.parentNode.removeChild(mensajePrimero);
-	}
-	else 
-		return;
+	
 	mensajePrimero = document.getElementById('graficoTabA');
 	mensajePrimero.click();
 
