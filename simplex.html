@@ -1,170 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>Simplex</title>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="assets/css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" href="assets/css/matrix-style.css" />
-<link rel="stylesheet" href="assets/css/matrix-media.css" />
-<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
-<style>
-  input
-  {
-    text-align: center;
-  }
-
-  input[type=number]::-webkit-outer-spin-button,
-
-  input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-
-  }
-  input[type=number] {
-    -moz-appearance:textfield;
-
-  }
-  .resultado
-  {
-    background: #8AF781;
-  }
-
-</style>
+    <title>Simplex</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="assets/css/matrix-style.css" />
+    <link rel="stylesheet" href="assets/css/matrix-media.css" />
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+    <style>
+    input {
+        text-align: center;
+    }
+    
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    
+    .resultado {
+        background: #8AF781;
+    }
+    </style>
 </head>
+
 <body>
-
-<!--Header-part-->
-<div id="header">
-  <h1><a href="dashboard.html">Matrix Admin</a></h1>
-</div>
-<!--close-Header-part--> 
-
-<!--top-Header-menu-->
-
-
-
-
-<!--sidebar-menu-->
-
-<div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-signal"></i> Método Simplex</a>
-  <ul>
-    <li><a href="index.html"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
-    <li> <a href="grafico.html"><i class="icon icon-signal"></i> <span>Método Gráfico</span></a> </li>
-    <li  class="active"><a href="tables.html"><i class="icon icon-th"></i> <span>Simplex</span></a></li>
-    
-  </ul>
-</div>
-<div id="content">
-  <div id="content-header">
-    <div id="breadcrumb"><a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Inicio</a> <a href="simplex.html" class="current">Método Simplex</a></div>
-    <h1>Método Simplex</h1>
-  </div>
-  <div class="container-fluid">
-    
-    <div class="accordion" id="collapse-group-configuracion">
-      
-      <div class="collapsible widget-box">
-        <div class="widget-title"> <a id="configuracionTabA" data-parent="#collapse-group-configuracion" href="#configuracionTab" data-toggle="collapse">  <span class="icon"> <i class="icon-align-justify"></i> </span>
-          <h5>Configuración inicial del problema</h5>
-          </a></div>
-        <div class="collapse in " id="configuracionTab">
-          <div class="widget-content" id="configuracion">
-              <div class="controls controls-row" >
-                <label for="variables" class="control-label span2">Número de variables</label>
-                <input type="number" min="0" name="variables" id="variables" class="span1 m-wrap">
-                
-                <label for="restricciones" class="control-label span2">Número de restricciones</label>
-                <input type="number" min="0" name="restricciones" id="restricciones" class="span1 m-wrap">
-                
-                <label class="control-label span1"></label>
-                  <div class="controls">
-                    <label class="span2">
-                      <input type="radio" name="radioMinMax" id="radioMinMax" value="minimizacion" checked>
-                      Minimización</label>
-                    <label class="span2">
-                      <input type="radio" name="radioMinMax" value="maximizacion">
-                      Maximización</label>
-                  </div>
-                <button type="button" onclick="entrada_variables()" class="btn btn-primary">Aceptar</button>
-              </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="collapsible widget-box">
-        <div class="widget-title"> <a id="objetivoTabA" data-parent="#collapse-group-configuracion" href="#objetivoTab" data-toggle="collapse"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-          <h5>Función Objetivo</h5>
-          </a></div>
-        <div class="collapse" id="objetivoTab">
-          <div class="widget-content">
-            <p id="mensajePrimero1">Primero introduce la configuración del problema</p>
-            <table id="funcionObjetivo" style="text-align: center;"> 
-              <tr id="cabeza"></tr>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="collapsible widget-box">
-        <div class="widget-title"> <a id="restriccionesTabA" data-parent="#collapse-group-configuracion" href="#restriccionesTab" data-toggle="collapse"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-            <h5>Restricciones</h5>
-            </a>
-        </div>
-        <div class="collapse " id="restriccionesTab">
-          <div class="widget-content">
-            <p id="mensajePrimero2">Primero introduce la configuración del problema</p>
-            <table id="tabla" style="text-align: center;">
-              <tr id="cabeceras"></tr>
-            </table>
-          </div>
-        </div>
-      </div>
-
+    <!--Header-part-->
+    <div id="header">
+        <h1><a href="dashboard.html">Matrix Admin</a></h1>
     </div>
-
-
-
-
-    
-
-
-    
-
-  
-    <div class="accordion" id="collapse-group">
-      
+    <!--close-Header-part-->
+    <!--top-Header-menu-->
+    <!--sidebar-menu-->
+    <div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-signal"></i> Método Simplex</a>
+        <ul>
+            <li><a href="index.html"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
+            <li> <a href="grafico.html"><i class="icon icon-signal"></i> <span>Método Gráfico</span></a> </li>
+            <li class="active"><a href="tables.html"><i class="icon icon-th"></i> <span>Simplex</span></a></li>
+        </ul>
     </div>
-    <div id="resultados">
-      
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"><a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Inicio</a> <a href="simplex.html" class="current">Método Simplex</a></div>
+            <h1>Método Simplex</h1>
+        </div>
+        <div class="container-fluid">
+            <div class="accordion" id="collapse-group-configuracion">
+                <div class="collapsible widget-box">
+                    <div class="widget-title">
+                        <a id="configuracionTabA" data-parent="#collapse-group-configuracion" href="#configuracionTab" data-toggle="collapse"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Configuración inicial del problema</h5>
+                        </a>
+                    </div>
+                    <div class="collapse in " id="configuracionTab">
+                        <div class="widget-content" id="configuracion">
+                            <div class="controls controls-row">
+                                <label for="variables" class="control-label span2">Número de variables</label>
+                                <input type="number" min="0" name="variables" id="variables" class="span1 m-wrap">
+                                <label for="restricciones" class="control-label span2">Número de restricciones</label>
+                                <input type="number" min="0" name="restricciones" id="restricciones" class="span1 m-wrap">
+                                <label class="control-label span1"></label>
+                                <div class="controls">
+                                    <label class="span2">
+                                        <input type="radio" name="radioMinMax" id="radioMinMax" value="minimizacion" checked> Minimización
+                                    </label>
+                                    <label class="span2">
+                                        <input type="radio" name="radioMinMax" value="maximizacion"> Maximización
+                                    </label>
+                                </div>
+                                <button type="button" onclick="entrada_variables()" class="btn btn-primary">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapsible widget-box">
+                    <div class="widget-title">
+                        <a id="objetivoTabA" data-parent="#collapse-group-configuracion" href="#objetivoTab" data-toggle="collapse"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Función Objetivo</h5>
+                        </a>
+                    </div>
+                    <div class="collapse" id="objetivoTab">
+                        <div class="widget-content">
+                            <p id="mensajePrimero1">Primero introduce la configuración del problema</p>
+                            <table id="funcionObjetivo" style="text-align: center;">
+                                <tr id="cabeza"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapsible widget-box">
+                    <div class="widget-title">
+                        <a id="restriccionesTabA" data-parent="#collapse-group-configuracion" href="#restriccionesTab" data-toggle="collapse"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+                            <h5>Restricciones</h5>
+                        </a>
+                    </div>
+                    <div class="collapse " id="restriccionesTab">
+                        <div class="widget-content">
+                            <p id="mensajePrimero2">Primero introduce la configuración del problema</p>
+                            <table id="tabla" style="text-align: center;">
+                                <tr id="cabeceras"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion" id="collapse-group">
+            </div>
+            <div id="resultados">
+            </div>
+        </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-</div>
-<!--Footer-part-->
-<div class="row-fluid">
-  <div id="footer" class="span12"> 2016 &copy; Simplex JS. Hecho por <a href="http://bigshell.tk" target="_blank">BigShell.tk</a> </div>
-</div>
-<!--end-Footer-part-->
-<script src="assets/js/jquery.min.js"></script> 
-<script src="assets/js/bootstrap.min.js"></script> 
-<script src="assets/js/simplexJSlib.js"></script>
+    <!--Footer-part-->
+    <div class="row-fluid">
+        <div id="footer" class="span12"> 2016 &copy; Simplex JS. Hecho por <a href="http://bigshell.tk" target="_blank">BigShell.tk</a> </div>
+    </div>
+    <!--end-Footer-part-->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/simplexJSlib.js"></script>
 </body>
+
 </html>

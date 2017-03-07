@@ -10,6 +10,7 @@ var maxX1, maxX2;
 var zX1,zX2;
 var zRes;
 var colores;
+var clicked = false;
 var intersecciones,areaFactible;
 function entrada_variables() {
 	numRestricciones = parseInt(document.getElementById('restricciones').value);
@@ -67,6 +68,13 @@ function entrada_variables() {
 	}
 
 	colores = new Array();
+	colores.push(rgbToColor(0, 139,139, 1));
+	colores.push(rgbToColor(184, 134,11, 1));
+	colores.push(rgbToColor(255, 69,0, 1));
+	colores.push(rgbToColor(128, 0,0, 1));
+	colores.push(rgbToColor(199, 21,133, 1));
+	colores.push(rgbToColor(189, 183,107, 1));
+	colores.push(rgbToColor(0, 0,205, 1));
 	
 	for(i=0;i<numRestricciones;i++)
 	{
@@ -74,7 +82,6 @@ function entrada_variables() {
 		fila = document.getElementById('fila' + (i+1));
 		console.log(fila);
 		var randomColor = colorAleatorio(1);
-		colores.push(randomColor);
 		//Se agrega cada entrada de coeficientes de cada restricción
 		for(j=1;j<=numVariables+2;j++)
 		{
@@ -92,6 +99,9 @@ function entrada_variables() {
 					fila.insertAdjacentHTML('beforeEnd','<td><input type="number" class="coeficientes span1 m-wrap"></td>');
 				}
 		}
+		fila.insertAdjacentHTML('beforeEnd','<td></td>');
+		fila.insertAdjacentHTML('beforeEnd','<td><input type="number" readonly class="span1 m-wrap"  style="background-color: ' + colores[i]  + '"></td>');
+
 	}
 			//console.log("Número de variables : " + numVariablesHolgura);
 	//console.log("Número de restricciones : " + numRestricciones);
@@ -123,10 +133,15 @@ function graficar()
 	var mensajePrimero = document.getElementById('mensajePrimero3');
 	if(mensajePrimero != null)
 		mensajePrimero.parentNode.removeChild(mensajePrimero);
-	
-	mensajePrimero = document.getElementById('graficoTabA');
-	mensajePrimero.click();
 
+	mensajePrimero = document.getElementById('graficoTabA');
+	if(clicked == false)
+	{
+		mensajePrimero.click();
+		clicked = true;
+	}
+
+	$('#grafica').empty();
 	document.getElementById('grafica').insertAdjacentHTML('beforeEnd','<div style="overflow:auto;" class="span10"><canvas style="margin-left:10px;" id="myCanvas" width="880" height="850"></canvas> </div> <div  class="span4" id="letrero">Lista de Funciones graficadas al momento</div>');
 	canvas = document.getElementById('myCanvas');
 	cleanCanvas = document.createElement('canvas');
@@ -513,6 +528,11 @@ function colorAleatorio(alpha)
    return "rgba(" + aleatorio(0,200) + "," + aleatorio(0,200) + "," + aleatorio(0,200) + "," + alpha + ")";
 }
 
+function rgbToColor(r,g,b,alpha)
+{
+	return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+}
+
 function dibujarAreaFactible(area)
 {
 
@@ -521,7 +541,6 @@ function dibujarAreaFactible(area)
 		alert("No se puede crear el poligono");
 		return;
 	}
-	ctx.fillStyle = "rgba(124, 255, 44, 0.3)";
 	
 	
 	/*
@@ -541,6 +560,15 @@ function dibujarAreaFactible(area)
 
 	}
 	*/
+	ctx.fillStyle = "red";
+	for(i=0;i<area.length;i++)
+	{
+		ctx.beginPath();
+		ctx.arc(area[i].x*escalaX1+40, (810-area[i].y*escalaX2), 3, 0, 2 * Math.PI, false);
+		ctx.fill();
+	}
+
+	ctx.fillStyle = "rgba(124, 255, 44, 0.3)";
 	ctx.beginPath();
 	ctx.moveTo(area[0].x*escalaX1+40,(810-area[0].y*escalaX2));
 
